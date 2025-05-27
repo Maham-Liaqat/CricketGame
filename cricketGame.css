@@ -1,0 +1,56 @@
+@keyframes batHit {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(-30deg); }
+      50% { transform: rotate(0deg); }
+      75% { transform: rotate(30deg); }
+      100% { transform: rotate(0deg); }
+    }
+    @keyframes ballHit {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+    @keyframes stumpFall {
+      0% { transform: rotate(0); }
+      100% { transform: rotate(90deg); }
+    }
+    @keyframes tossAnimation {
+      0% { transform: rotate(0) translateY(0); opacity: 1; }
+      100% { transform: rotate(360deg) translateY(-100px); opacity: 0; }
+    }
+    .bat-hit { animation: batHit 0.5s ease; }
+    .ball-hit { animation: ballHit 0.5s ease; }
+    .stump-fall { animation: stumpFall 0.5s ease forwards; }
+    .toss-animation { animation: tossAnimation 1s ease-out forwards; }
+    .cricket-ground {
+      background-image: url('/CricketGAME/freepik__add-spectators-in-the-stands-on-both-sides-of-the-__62241.png');
+      background-size: cover;
+      background-position: center;
+    }
+    .move-card {
+      perspective: 1000px;
+      transform-style: preserve-3d;
+      transition: all 0.5s ease;
+    }
+    .move-card:hover {
+      transform: translateY(-5px) rotateX(10deg);
+      box-shadow: 0 20px 30px rgba(0,0,0,0.3);
+    }
+    .move-card:active {
+      transform: translateY(0) rotateX(0);
+    }
+    /* Custom scrollbar */
+    .scrollable-container::-webkit-scrollbar {
+      width: 8px;
+    }
+    .scrollable-container::-webkit-scrollbar-track {
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+    }
+    .scrollable-container::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.3);
+      border-radius: 10px;
+    }
+    .scrollable-container::-webkit-scrollbar-thumb:hover {
+      background: rgba(255,255,255,0.5);
+    }

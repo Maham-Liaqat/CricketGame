@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bat Ball Stump Game</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+ <link rel="stylesheet" href="cricketGame.css">
+</head>
+<body class="cricket-ground min-h-screen flex flex-col items-center justify-center text-white font-sans relative overflow-hidden">
+
+  <!-- Toss Modal -->
+  <div id="tossModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+    <div class="bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl p-8 w-80 md:w-[400px] flex flex-col items-center gap-6 border border-white/20">
+      <h2 class="text-2xl font-bold text-yellow-400">Let's Toss First!</h2>
+      <p class="text-center">The toss decides who starts first. Click below to toss the coin.</p>
+      <button id="tossButton" class="bg-yellow-400 text-black font-bold py-3 px-6 rounded-xl hover:scale-105 transition transform duration-200 shadow-lg">
+        🏏 Toss Coin
+      </button>
+      <div id="tossResult" class="text-xl font-bold text-center min-h-8"></div>
+    </div>
+  </div>
+
+  <h1 class="text-4xl md:text-6xl font-bold mb-4 text-yellow-400 drop-shadow-lg">
+    Bat Ball Stump Game
+  </h1>
+
+  <!-- Scrollable container -->
+  <div class="scrollable-container bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl p-8 w-full max-w-3xl max-h-[80vh] overflow-y-auto flex flex-col items-center gap-6 border border-white/20 relative">
+    
+    <!-- Battle Arena -->
+    <div class="w-full flex justify-between items-center mb-6 px-4">
+      <div class="text-center">
+        <div class="text-4xl">🧑</div>
+        <div class="font-bold text-yellow-500">Player</div>
+      </div>
+      
+      <div id="vsDisplay" class="text-4xl mx-4 animate-pulse text-black">VS</div>
+      
+      <div class="text-center">
+        <div class="text-4xl">🤖</div>
+        <div class="font-bold text-red-500">Computer</div>
+      </div>
+    </div>
+
+    <!-- Move Display -->
+    <div id="moveDisplay" class="w-full flex justify-between items-center mb-6 px-4 hidden">
+      <div id="playerMove" class="text-3xl text-center w-1/3"></div>
+      <div class="text-2xl mx-4">⚔️</div>
+      <div id="computerMove" class="text-3xl text-center w-1/3"></div>
+    </div>
+
+    <div class="text-xl font-medium text-black text-center">
+      Choose your move!
+    </div>
+
+    <div class="flex justify-center gap-4 w-full">
+      <button class="move-card bg-yellow-400/90 hover:bg-yellow-300 text-black font-semibold py-4 px-4 rounded-xl transition transform duration-200 w-full shadow-lg bat">
+        <div class="text-3xl">🏏</div>
+        <div>Bat</div>
+      </button>
+      <button class="move-card bg-green-400/90 hover:bg-green-300 text-black font-semibold py-4 px-4 rounded-xl transition transform duration-200 w-full shadow-lg ball">
+        <div class="text-3xl">🏐</div>
+        <div>Ball</div>
+      </button>
+      <button class="move-card bg-red-400/90 hover:bg-red-300 text-black font-semibold py-4 px-4 rounded-xl transition transform duration-200 w-full shadow-lg stump">
+        <div class="text-3xl">🧱</div>
+        <div>Stump</div>
+      </button>
+    </div>
+
+    <!-- Scoreboard -->
+    <div class="w-full bg-black/30 rounded-lg p-4 mt-4 border border-white/10">
+      <div class="flex justify-between items-center">
+        <div class="text-center">
+          <div class="text-lg">Your Score</div>
+          <div class="text-3xl font-bold userScore">0</div>
+        </div>
+        <div class="text-2xl">-</div>
+        <div class="text-center">
+          <div class="text-lg">Computer Score</div>
+          <div class="text-3xl font-bold compScore">0</div>
+        </div>
+      </div>
+      <div id="result" class="text-center mt-2 text-xl font-semibold py-2"></div>
+    </div>
+
+    <div class="flex gap-4 w-full">
+      <button class="bg-white/20 hover:bg-white/30 text-black px-4 py-2 rounded-md transition flex-1" onclick="resetGame()">
+        🔁 Reset Game
+      </button>
+      <button id="toggleHistoryBtn" class="bg-white/20 hover:bg-white/30 text-black px-4 py-2 rounded-md transition flex-1">
+        📜 Show Move History
+      </button>
+    </div>
+
+    <div id="history" class="w-full max-h-40 overflow-y-auto bg-white/5 p-3 rounded-md border border-white/10 hidden">
+      <p class="font-semibold text-white/80 mb-2">Move History:</p>
+      <div id="historyContent" class="space-y-2"></div>
+    </div>
+
+  </div>
+
+  <footer class="mt-4 text-white text-sm opacity-60">
+    © 2025 Bat Ball Stump Game
+  </footer>
+
+  <audio id="winSound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
+  <audio id="loseSound" src="https://www.myinstants.com/media/sounds/wrong-answer-sound-effect.mp3"></audio>
+  <audio id="tieSound" src="https://actions.google.com/sounds/v1/cartoon/pop.ogg"></audio>
+  <audio id="tossSound" src="https://actions.google.com/sounds/v1/cartoon/coin_spin.ogg"></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
