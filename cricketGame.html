@@ -1,115 +1,268 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bat Ball Stump Game</title>
-  <script src="https://cdn.tailwindcss.com"></script>
- <link rel="stylesheet" href="cricketGame.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cricket Premier - Bat Ball Stump</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="/CricketGAME/cricketGame.css">
 </head>
-<body class="cricket-ground min-h-screen flex flex-col items-center justify-center text-white font-sans relative overflow-hidden">
-
-  <!-- Toss Modal -->
-  <div id="tossModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-    <div class="bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl p-8 w-80 md:w-[400px] flex flex-col items-center gap-6 border border-white/20">
-      <h2 class="text-2xl font-bold text-yellow-400">Let's Toss First!</h2>
-      <p class="text-center">The toss decides who starts first. Click below to toss the coin.</p>
-      <button id="tossButton" class="bg-yellow-400 text-black font-bold py-3 px-6 rounded-xl hover:scale-105 transition transform duration-200 shadow-lg">
-        🏏 Toss Coin
-      </button>
-      <div id="tossResult" class="text-xl font-bold text-center min-h-8"></div>
+<body>
+  <div class="container">
+    <!-- Main Menu -->
+    <div id="mainMenu" class="screen active">
+      <div class="main-menu">
+        <h1><i class="fas fa-cricket"></i> Cricket Premier</h1>
+        <button id="quickPlayBtn" class="menu-btn">Quick Play</button>
+        <button id="tournamentBtn" class="menu-btn">Tournament Mode</button>
+        <button id="miniGamesBtn" class="menu-btn">Mini Games</button>
+        <button id="profileBtn" class="menu-btn">Player Profile</button>
+      </div>
     </div>
-  </div>
-
-  <h1 class="text-4xl md:text-6xl font-bold mb-4 text-yellow-400 drop-shadow-lg">
-    Bat Ball Stump Game
-  </h1>
-
-  <!-- Scrollable container -->
-  <div class="scrollable-container bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl p-8 w-full max-w-3xl max-h-[80vh] overflow-y-auto flex flex-col items-center gap-6 border border-white/20 relative">
     
-    <!-- Battle Arena -->
-    <div class="w-full flex justify-between items-center mb-6 px-4">
-      <div class="text-center">
-        <div class="text-4xl">🧑</div>
-        <div class="font-bold text-yellow-500">Player</div>
-      </div>
-      
-      <div id="vsDisplay" class="text-4xl mx-4 animate-pulse text-black">VS</div>
-      
-      <div class="text-center">
-        <div class="text-4xl">🤖</div>
-        <div class="font-bold text-red-500">Computer</div>
-      </div>
-    </div>
-
-    <!-- Move Display -->
-    <div id="moveDisplay" class="w-full flex justify-between items-center mb-6 px-4 hidden">
-      <div id="playerMove" class="text-3xl text-center w-1/3"></div>
-      <div class="text-2xl mx-4">⚔️</div>
-      <div id="computerMove" class="text-3xl text-center w-1/3"></div>
-    </div>
-
-    <div class="text-xl font-medium text-black text-center">
-      Choose your move!
-    </div>
-
-    <div class="flex justify-center gap-4 w-full">
-      <button class="move-card bg-yellow-400/90 hover:bg-yellow-300 text-black font-semibold py-4 px-4 rounded-xl transition transform duration-200 w-full shadow-lg bat">
-        <div class="text-3xl">🏏</div>
-        <div>Bat</div>
-      </button>
-      <button class="move-card bg-green-400/90 hover:bg-green-300 text-black font-semibold py-4 px-4 rounded-xl transition transform duration-200 w-full shadow-lg ball">
-        <div class="text-3xl">🏐</div>
-        <div>Ball</div>
-      </button>
-      <button class="move-card bg-red-400/90 hover:bg-red-300 text-black font-semibold py-4 px-4 rounded-xl transition transform duration-200 w-full shadow-lg stump">
-        <div class="text-3xl">🧱</div>
-        <div>Stump</div>
-      </button>
-    </div>
-
-    <!-- Scoreboard -->
-    <div class="w-full bg-black/30 rounded-lg p-4 mt-4 border border-white/10">
-      <div class="flex justify-between items-center">
-        <div class="text-center">
-          <div class="text-lg">Your Score</div>
-          <div class="text-3xl font-bold userScore">0</div>
+    <!-- Game Screen -->
+    <div id="gameScreen" class="screen">
+      <div class="game-header">
+        <div class="player-info">
+          <img id="playerAvatar" class="avatar" src="/CricketGAME/images/playerAvatar.jpg" alt="Player">
+          <span id="playerName">Player</span>
+          <div class="score" id="playerScore">0</div>
         </div>
-        <div class="text-2xl">-</div>
-        <div class="text-center">
-          <div class="text-lg">Computer Score</div>
-          <div class="text-3xl font-bold compScore">0</div>
+        
+        <div class="vs">VS</div>
+        
+        <div class="opponent-info">
+          <img id="opponentAvatar" class="avatar" src="/CricketGAME/images/robotavatar.jpg" alt="Opponent">
+          <span id="opponentName">Computer</span>
+          <div class="score" id="opponentScore">0</div>
         </div>
       </div>
-      <div id="result" class="text-center mt-2 text-xl font-semibold py-2"></div>
+      
+      <div class="round-info">
+        Round <span id="currentRound">1</span> of <span id="totalRounds">5</span>
+      </div>
+      
+      <div class="move-options">
+        <div class="move-card" id="batBtn">
+          <div class="move-emoji">🏏</div>
+          <div class="move-name">Bat</div>
+        </div>
+        <div class="move-card" id="ballBtn">
+          <div class="move-emoji">🏐</div>
+          <div class="move-name">Ball</div>
+        </div>
+        <div class="move-card" id="stumpBtn">
+          <div class="move-emoji">🧱</div>
+          <div class="move-name">Stump</div>
+        </div>
+      </div>
+      
+      <div class="action-log" id="actionLog"></div>
+      
+      <div class="game-controls">
+        <button id="quitBtn" class="menu-btn"><i class="fas fa-sign-out-alt"></i> Quit</button>
+      </div>
     </div>
-
-    <div class="flex gap-4 w-full">
-      <button class="bg-white/20 hover:bg-white/30 text-black px-4 py-2 rounded-md transition flex-1" onclick="resetGame()">
-        🔁 Reset Game
-      </button>
-      <button id="toggleHistoryBtn" class="bg-white/20 hover:bg-white/30 text-black px-4 py-2 rounded-md transition flex-1">
-        📜 Show Move History
-      </button>
+    
+    <!-- Tournament Screen -->
+    <div id="tournamentScreen" class="screen">
+      <h2>Tournament Mode</h2>
+      <div id="tournamentBracket" class="bracket">
+        <!-- Bracket will be generated dynamically -->
+      </div>
+      <button id="startTournamentBtn" class="menu-btn">Start Tournament</button>
+      <button id="backToMenuBtn" class="menu-btn">Back to Menu</button>
     </div>
-
-    <div id="history" class="w-full max-h-40 overflow-y-auto bg-white/5 p-3 rounded-md border border-white/10 hidden">
-      <p class="font-semibold text-white/80 mb-2">Move History:</p>
-      <div id="historyContent" class="space-y-2"></div>
+    
+    <!-- Mini-Games Screen -->
+    <div id="miniGamesScreen" class="screen">
+      <h2>Mini Games</h2>
+      <div class="mini-game-options">
+        <button id="battingChallengeBtn" class="menu-btn">Batting Challenge</button>
+        <button id="bowlingAccuracyBtn" class="menu-btn">Bowling Accuracy</button>
+        <button id="backToMenuBtn2" class="menu-btn">Back to Menu</button>
+      </div>
     </div>
-
+    
+    <!-- Batting Challenge Game -->
+    <div id="battingChallengeScreen" class="screen">
+      <h2>Batting Challenge</h2>
+      <div class="game-stats">
+        <div class="stat-box">
+          <div>Time: <span id="battingTime">30</span>s</div>
+        </div>
+        <div class="stat-box">
+          <div>Score: <span id="battingScore">0</span></div>
+        </div>
+        <div class="stat-box">
+          <div>Balls: <span id="ballsFaced">0</span></div>
+        </div>
+      </div>
+      <div class="batting-pitch">
+        <div class="bat" id="bat"></div>
+        <div class="stumps">
+          <div class="stump"></div>
+          <div class="stump"></div>
+          <div class="stump"></div>
+        </div>
+      </div>
+      <button id="startBattingBtn" class="menu-btn">Start Challenge</button>
+      <button id="backToMiniGamesBtn" class="menu-btn">Back to Mini Games</button>
+    </div>
+    
+    <!-- Bowling Accuracy Game -->
+    <div id="bowlingAccuracyScreen" class="screen">
+      <h2>Bowling Accuracy</h2>
+      <div class="game-stats">
+        <div class="stat-box">
+          <div>Attempts: <span id="bowlingAttempts">0</span>/10</div>
+        </div>
+        <div class="stat-box">
+          <div>Score: <span id="bowlingScore">0</span></div>
+        </div>
+        <div class="stat-box">
+          <div>Accuracy: <span id="bowlingAccuracy">0</span>%</div>
+        </div>
+      </div>
+      <div class="batting-pitch" id="bowlingPitch">
+        <div class="target" id="bowlingTarget"></div>
+        <div class="stumps">
+          <div class="stump"></div>
+          <div class="stump"></div>
+          <div class="stump"></div>
+        </div>
+      </div>
+      <button id="startBowlingBtn" class="menu-btn">Start Bowling</button>
+      <button id="backToMiniGamesBtn2" class="menu-btn">Back to Mini Games</button>
+    </div>
+    
+    <!-- Profile Screen -->
+    <div id="profileScreen" class="screen">
+      <h2>Player Profile</h2>
+      <div class="profile-container">
+        <div class="profile-info">
+          <div class="form-group">
+            <label for="playerNameInput">Player Name:</label>
+            <input type="text" id="playerNameInput" placeholder="Enter your name">
+          </div>
+          <div class="form-group">
+            <label>Avatar:</label>
+            <div class="avatar-options">
+              <img src="/CricketGAME/images/avatar1.avif" class="avatar-option selected">
+              <img src="/CricketGAME/images/avatar2.jpg" class="avatar-option">
+              <img src="/CricketGAME/images/playerAvatar.jpg" class="avatar-option">
+              <img src="/CricketGAME/images/robotavatar.jpg" class="avatar-option">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="difficultySelect">Difficulty:</label>
+            <select id="difficultySelect">
+              <option value="easy">Easy</option>
+              <option value="medium" selected>Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </div>
+          <button id="saveProfileBtn" class="menu-btn">Save Profile</button>
+        </div>
+        <div class="profile-stats">
+          <h3>Player Statistics</h3>
+          <div class="stat-item">
+            <div>Matches Played: <span id="matchesPlayed">0</span></div>
+            <div class="stat-bar"><div class="stat-fill" style="width: 0%"></div></div>
+          </div>
+          <div class="stat-item">
+            <div>Win Rate: <span id="winRate">0</span>%</div>
+            <div class="stat-bar"><div class="stat-fill" style="width: 0%"></div></div>
+          </div>
+          <div class="stat-item">
+            <div>Tournaments Won: <span id="tournamentsWon">0</span></div>
+            <div class="stat-bar"><div class="stat-fill" style="width: 0%"></div></div>
+          </div>
+          <div class="stat-item">
+            <div>Batting High Score: <span id="battingHighScore">0</span></div>
+            <div class="stat-bar"><div class="stat-fill" style="width: 0%"></div></div>
+          </div>
+          <div class="stat-item">
+            <div>Bowling Accuracy: <span id="bowlingHighAccuracy">0</span>%</div>
+            <div class="stat-bar"><div class="stat-fill" style="width: 0%"></div></div>
+          </div>
+        </div>
+      </div>
+      <button id="backToMenuBtn3" class="menu-btn">Back to Menu</button>
+    </div>
   </div>
 
-  <footer class="mt-4 text-white text-sm opacity-60">
-    © 2025 Bat Ball Stump Game
-  </footer>
+  <!-- Result Popup -->
+  <div id="resultPopup" class="result-popup">
+    <div class="result-content">
+      <h2 class="result-title" id="resultTitle">Match Result</h2>
+      <div class="winner-trophy" id="winnerTrophy">🏆</div>
+      <div class="result-scores">
+        <div class="player-result">
+          <img id="resultPlayerAvatar" class="result-avatar" src="/CricketGAME/images/playerAvatar.jpg">
+          <div class="result-name" id="resultPlayerName">Player</div>
+          <div class="result-score" id="resultPlayerScore">0</div>
+        </div>
+        <div class="opponent-result">
+          <img id="resultOpponentAvatar" class="result-avatar" src="/CricketGAME/images/robotavatar.jpg">
+          <div class="result-name" id="resultOpponentName">Computer</div>
+          <div class="result-score" id="resultOpponentScore">0</div>
+        </div>
+      </div>
+      <button id="resultCloseBtn" class="menu-btn">Continue</button>
+    </div>
+  </div>
 
-  <audio id="winSound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
-  <audio id="loseSound" src="https://www.myinstants.com/media/sounds/wrong-answer-sound-effect.mp3"></audio>
-  <audio id="tieSound" src="https://actions.google.com/sounds/v1/cartoon/pop.ogg"></audio>
-  <audio id="tossSound" src="https://actions.google.com/sounds/v1/cartoon/coin_spin.ogg"></audio>
+  <!-- Tournament Result Popup -->
+  <div id="tournamentResultPopup" class="result-popup">
+    <div class="result-content">
+      <h2 class="result-title" id="tournamentResultTitle">Tournament Complete</h2>
+      <div class="trophy-case" id="tournamentTrophy">🏆</div>
+      <div class="tournament-result" id="tournamentResultText">
+        You finished the tournament!
+      </div>
+      <div class="standings" id="tournamentStandings">
+        <!-- Standings will be added dynamically -->
+      </div>
+      <button id="tournamentResultCloseBtn" class="menu-btn">Continue</button>
+    </div>
+  </div>
 
-  <script src="script.js"></script>
+  <!-- Mini-Game Result Popup -->
+  <div id="miniGameResultPopup" class="result-popup">
+    <div class="result-content">
+      <h2 class="result-title" id="miniGameResultTitle">Challenge Complete</h2>
+      <div class="winner-trophy" id="miniGameTrophy">🏆</div>
+      <div class="result-scores">
+        <div id="miniGameResultText">
+          Your score: <span id="miniGameScore">0</span>
+        </div>
+      </div>
+      <button id="miniGameResultCloseBtn" class="menu-btn">Continue</button>
+    </div>
+  </div>
+
+  <!-- Audio Elements -->
+  <audio id="bgMusic" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="winSound">
+    <source src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg" type="audio/ogg">
+  </audio>
+  <audio id="loseSound">
+    <source src="https://www.myinstants.com/media/sounds/wrong-answer-sound-effect.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="tieSound">
+    <source src="https://actions.google.com/sounds/v1/cartoon/pop.ogg" type="audio/ogg">
+  </audio>
+  <audio id="hitSound">
+    <source src="https://actions.google.com/sounds/v1/sports/cricket_hit.ogg" type="audio/ogg">
+  </audio>
+  <audio id="bowlSound">
+    <source src="https://actions.google.com/sounds/v1/sports/cricket_bowl.ogg" type="audio/ogg">
+  </audio>
+
+  <script src="/CricketGAME/script.js"></script>
 </body>
 </html>

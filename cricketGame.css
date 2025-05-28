@@ -1,56 +1,547 @@
-@keyframes batHit {
+/* Base Styles */
+    :root {
+      --primary: #1e88e5;
+      --secondary: #ff5722;
+      --dark: #212121;
+      --light: #f5f5f5;
+      --success: #4caf50;
+      --danger: #f44336;
+      --warning: #ffc107;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background: url('/CricketGAME/images/gameBg.png') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    /* Game Screens */
+    .screen {
+      display: none;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    }
+    
+    .screen.active {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+    
+    /* Main Menu */
+    .main-menu {
+      text-align: center;
+    }
+    
+    .main-menu h1 {
+      font-size: 3rem;
+      margin-bottom: 2rem;
+      color: var(--warning);
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    }
+    
+    .menu-btn {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .menu-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Game Screen */
+    .game-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    
+    .player-info, .opponent-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 30%;
+    }
+    
+    .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 3px solid white;
+      margin-bottom: 10px;
+      object-fit: cover;
+      background-color: #fff;
+    }
+    
+    .vs {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--warning);
+    }
+    
+    .score {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-top: 5px;
+    }
+    
+    .round-info {
+      text-align: center;
+      margin: 1rem 0;
+      font-size: 1.2rem;
+    }
+    
+    .move-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin: 2rem 0;
+    }
+    
+    .move-card {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      perspective: 1000px;
+      transform-style: preserve-3d;
+    }
+    
+    .move-card:hover {
+      transform: translateY(-10px) rotateX(10deg);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    .move-emoji {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+    
+    .move-name {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--dark);
+    }
+    
+    .action-log {
+      max-height: 200px;
+      overflow-y: auto;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 10px;
+      padding: 10px;
+      margin: 1rem 0;
+    }
+    
+    .log-entry {
+      padding: 8px;
+      margin: 5px 0;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .log-entry.player {
+      background: rgba(76, 175, 80, 0.2);
+      border-left: 4px solid var(--success);
+    }
+    
+    .log-entry.opponent {
+      background: rgba(244, 67, 54, 0.2);
+      border-left: 4px solid var(--danger);
+    }
+    
+    .log-entry.draw {
+      background: rgba(255, 193, 7, 0.2);
+      border-left: 4px solid var(--warning);
+    }
+    
+    /* Tournament Bracket */
+    .bracket {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin: 2rem 0;
+    }
+    
+    .bracket-match {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .bracket-player {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .bracket-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+    
+    .bracket-vs {
+      font-weight: bold;
+      margin: 0 15px;
+    }
+    
+    .bracket-score {
+      font-weight: bold;
+      min-width: 30px;
+      text-align: center;
+    }
+    
+    .current-match {
+      background: rgba(255, 193, 7, 0.2);
+      border: 1px solid var(--warning);
+    }
+    
+    /* Mini-Games */
+    .mini-game-container {
+      text-align: center;
+      margin-top: 2rem;
+    }
+    
+    .batting-pitch {
+      width: 100%;
+      height: 300px;
+      background: url('/CricketGAME/images/gameBg.png') center/cover;
+      position: relative;
+      margin: 1rem 0;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    
+    .ball {
+      width: 30px;
+      height: 30px;
+      background: radial-gradient(circle at 30% 30%, white, red);
+      border-radius: 50%;
+      position: absolute;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+    
+    .bat {
+      width: 100px;
+      height: 20px;
+      background: linear-gradient(to right, #8B4513, #A0522D);
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) rotate(0deg);
+      transform-origin: left center;
+      z-index: 10;
+    }
+    
+    .stumps {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 5px;
+    }
+    
+    .stump {
+      width: 10px;
+      height: 60px;
+      background: linear-gradient(to bottom, #8B4513, #A0522D);
+      border-radius: 2px;
+    }
+    
+    .target {
+      width: 50px;
+      height: 50px;
+      background: rgba(255, 255, 255, 0.3);
+      border: 2px dashed white;
+      border-radius: 50%;
+      position: absolute;
+    }
+    
+    .game-stats {
+      display: flex;
+      justify-content: space-around;
+      margin: 1rem 0;
+    }
+    
+    .stat-box {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+      border-radius: 5px;
+      min-width: 100px;
+    }
+    
+    /* Profile Screen */
+    .profile-container {
+      display: flex;
+      gap: 2rem;
+      margin-top: 1rem;
+    }
+    
+    .profile-info {
+      flex: 1;
+    }
+    
+    .profile-stats {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 1rem;
+      border-radius: 10px;
+    }
+
+    #playerNameInput{
+      background: rgba(0, 0, 0, 0.596);
+      padding: 1rem;
+      border-radius: 10px; 
+      color: white;
+      font-size: medium;
+      font-weight: 600;
+    }
+
+    .stat-item {
+      margin: 10px 0;
+    }
+    
+    .stat-bar {
+      height: 10px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 5px;
+      margin-top: 5px;
+      overflow: hidden;
+    }
+    
+    .stat-fill {
+      height: 100%;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+    }
+    
+    .avatar-options {
+      display: flex;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    
+    .avatar-option {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .avatar-option.selected {
+      border-color: var(--warning);
+      transform: scale(1.1);
+    }
+    
+    /* Result Popup */
+    .result-popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.5s ease;
+    }
+    
+    .result-popup.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .result-content {
+      background: linear-gradient(135deg, #1e5799 0%, #2989d8 100%);
+      padding: 2rem;
+      border-radius: 15px;
+      text-align: center;
+      max-width: 500px;
+      width: 90%;
+      transform: scale(0.8);
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    }
+    
+    .result-popup.active .result-content {
+      transform: scale(1);
+    }
+    
+    .result-title {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: var(--warning);
+    }
+    
+    .result-scores {
+      display: flex;
+      justify-content: space-around;
+      margin: 2rem 0;
+    }
+    
+    .player-result, .opponent-result {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .result-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 2px solid white;
+      margin-bottom: 10px;
+    }
+    
+    .result-score {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    
+    .winner-trophy {
+      font-size: 3rem;
+      margin: 1rem 0;
+      animation: bounce 2s infinite;
+    }
+    
+    /* Tournament Result */
+    .tournament-result {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    
+    .trophy-case {
+      font-size: 5rem;
+      margin: 1rem 0;
+    }
+    
+    .standings {
+      margin-top: 1rem;
+    }
+    
+    .standing-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes batHit {
       0% { transform: rotate(0deg); }
       25% { transform: rotate(-30deg); }
       50% { transform: rotate(0deg); }
       75% { transform: rotate(30deg); }
       100% { transform: rotate(0deg); }
     }
+    
     @keyframes ballHit {
       0% { transform: scale(1); }
       50% { transform: scale(1.2); }
       100% { transform: scale(1); }
     }
-    @keyframes stumpFall {
-      0% { transform: rotate(0); }
-      100% { transform: rotate(90deg); }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
     }
-    @keyframes tossAnimation {
-      0% { transform: rotate(0) translateY(0); opacity: 1; }
-      100% { transform: rotate(360deg) translateY(-100px); opacity: 0; }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
     }
-    .bat-hit { animation: batHit 0.5s ease; }
-    .ball-hit { animation: ballHit 0.5s ease; }
-    .stump-fall { animation: stumpFall 0.5s ease forwards; }
-    .toss-animation { animation: tossAnimation 1s ease-out forwards; }
-    .cricket-ground {
-      background-image: url('/CricketGAME/freepik__add-spectators-in-the-stands-on-both-sides-of-the-__62241.png');
-      background-size: cover;
-      background-position: center;
+    
+    @keyframes swing {
+      0% { transform: rotate(-30deg); }
+      50% { transform: rotate(30deg); }
+      100% { transform: rotate(-30deg); }
     }
-    .move-card {
-      perspective: 1000px;
-      transform-style: preserve-3d;
-      transition: all 0.5s ease;
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
-    .move-card:hover {
-      transform: translateY(-5px) rotateX(10deg);
-      box-shadow: 0 20px 30px rgba(0,0,0,0.3);
+    
+    .bat-animation {
+      animation: batHit 0.5s ease;
     }
-    .move-card:active {
-      transform: translateY(0) rotateX(0);
+    
+    .ball-animation {
+      animation: ballHit 0.5s ease;
     }
-    /* Custom scrollbar */
-    .scrollable-container::-webkit-scrollbar {
-      width: 8px;
+    
+    .shake-animation {
+      animation: shake 0.5s ease;
     }
-    .scrollable-container::-webkit-scrollbar-track {
-      background: rgba(255,255,255,0.1);
-      border-radius: 10px;
+    
+    .swing-animation {
+      animation: swing 0.5s ease;
     }
-    .scrollable-container::-webkit-scrollbar-thumb {
-      background: rgba(255,255,255,0.3);
-      border-radius: 10px;
-    }
-    .scrollable-container::-webkit-scrollbar-thumb:hover {
-      background: rgba(255,255,255,0.5);
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .move-options {
+        grid-template-columns: 1fr;
+      }
+      
+      .game-header {
+        flex-direction: column;
+      }
+      
+      .player-info, .opponent-info {
+        width: 100%;
+        margin-bottom: 1rem;
+      }
+      
+      .profile-container {
+        flex-direction: column;
+      }
     }
